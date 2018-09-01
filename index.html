@@ -6,12 +6,19 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
 
+	<script type="text/javascript" src="https://cdn.emailjs.com/sdk/2.2.4/email.min.js"></script>
+	<script type="text/javascript">
+	   (function(){
+		  emailjs.init("user_WPjQVdkGqe0dRD7kbBcGr");
+	   })();
+	</script>
 </head>
 
 
 <script>
 
 $(document).ready(function() {
+	$("#submit_status").hide();
 	divClone = $("#main_table").clone();
 	Get_Data();
 });
@@ -24,6 +31,7 @@ var m = [];
 var nCol = 4;
 var excel_output = [];
 var num_games = [];
+var picks = [];
 
 var away_teams = [];
 var home_teams = [];
@@ -98,7 +106,7 @@ function Run_Excel(){
 		$('#main_table').append( '<table>');
 		//first row is table headings
 		$('#main_table').append( '<tr>');
-		var table_headings = ['Game', 'Away', 'Home', 'Pick'];
+		var table_headings = ['Game', 'Away', 'Home', 'Your Pick'];
 		for (var i  = 0; i<table_headings.length; i++){
 			$('#main_table').append('<th>' +table_headings[i] +'</th>');
 		}
@@ -141,6 +149,53 @@ function TestFunc(g,t){
 	}
 	pick_list[g] = str.toUpperCase();
 	Run_Excel()	
+}
+
+function SendPicks(){
+
+	$("#submit_button").hide();
+	$("#submit_status").show();
+	$("#submit_status").text('Sending picks...wait for confirmation.');
+	
+	pick_list[num_games + 1] = frm1.mondayPoints.value;
+	if (num_games < 16){
+		for (var g = num_games + 2; g <=17; g++){
+			pick_list[g] = 'BYE';
+		}
+	}
+	
+	var templateParams = {
+		from_name: frm1.name.value,
+		pick1: pick_list[1],
+		pick2: pick_list[2],
+		pick3: pick_list[3],
+		pick4: pick_list[4],
+		pick5: pick_list[5],
+		pick6: pick_list[6],
+		pick7: pick_list[7],
+		pick8: pick_list[8],
+		pick9: pick_list[9],
+		pick10: pick_list[10],
+		pick11: pick_list[11],
+		pick12: pick_list[12],
+		pick13: pick_list[13],
+		pick14: pick_list[14],
+		pick15: pick_list[15],
+		pick16: pick_list[16],
+		pick17: pick_list[17],
+		to_name1: 'strongrw12@mail.wlu.edu',
+		to_name2: frm1.email.value
+	};
+ 
+	emailjs.send('gmail', 'template_bawYh5Di', templateParams)
+		.then(function(response) {
+		   console.log('SUCCESS!', response.status, response.text);
+		   $("#submit_status").text('Picks sent! See your email for confirmation.');
+		}, function(error) {
+		   console.log('FAILED...', error);
+		   $("#submit_status").text('SENDING FAILED - PICKS NOT SENT');
+		   $("#submit_button").show();
+		});
 }
 
 
@@ -213,9 +268,9 @@ th.vertical2{
 
 td {
 text-align:center;
-font-size: 10px;
+font-size: 12px;
 padding: 4px;
-border: 0px solid #000;
+border: 1px solid #000;
  white-space: nowrap;
   overflow: hidden;
 }
@@ -278,8 +333,16 @@ table {
 <body>
 
 <div id="main_table"></div>
-
-
-
+<form id="frm1">
+  Monday Points:
+  <input type="text" size="2" maxlength="2" name="mondayPoints" value="">
+  <br>Name:
+  <input type="text"  size="10" name="name" value="">
+  <br>Your Email:
+  <input type="text"  size="15" name="email" value="">
+  <br><br>
+</form>
+<div id="submit_button"><button id ="submit_button" onclick="SendPicks()">Submit Picks</button></div>
+<div id="submit_status"></div>
 
 </body>
