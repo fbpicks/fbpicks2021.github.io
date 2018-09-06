@@ -139,6 +139,14 @@ function TestFunc(g,t){
 	str = str.replace(/\d/g, "");
 	str = str.replace('+', "");
 	str = str.replace('.', "");
+	str = str.toUpperCase();
+	/* str = str.replace('KC', 'KC*');
+	str = str.replace('NO', 'NO*');
+	str = str.replace('SF', 'SF*');
+	str = str.replace('TB', 'TB*');
+	str = str.replace('NE', 'NE*');
+	str = str.replace('GB', 'GB*');
+	str = str.replace('AZ', 'AZ*'); */
 	
 	if (t == 1){
 		pick_color1[g] = 1;
@@ -147,14 +155,20 @@ function TestFunc(g,t){
 		pick_color2[g] = 1;
 		pick_color1[g] = 0;
 	}
-	pick_list[g] = str.toUpperCase();
+	pick_list[g] = str;
 	Run_Excel()	
 }
 
 function SendPicks(){
 
-	$("#submit_button").hide();
 	$("#submit_status").show();
+
+	if (frm1.email.value.length < 2 ||  frm1.name.value.length < 2){
+		$("#submit_status").text('PICKS NOT SENT - please enter your entry name and email address before submitting.');
+		return
+	}
+
+	$("#submit_button").hide();
 	$("#submit_status").text('Sending picks...wait for confirmation.');
 	
 	pick_list[num_games + 1] = frm1.mondayPoints.value;
@@ -162,6 +176,16 @@ function SendPicks(){
 		for (var g = num_games + 2; g <=17; g++){
 			pick_list[g] = 'BYE';
 		}
+	}
+	
+	for (var g = 1; g <=17; g++){
+		pick_list[g] = pick_list[g].replace('NO', 'NO*');
+		pick_list[g] = pick_list[g].replace('SF', 'SF*');
+		pick_list[g] = pick_list[g].replace('TB', 'TB*');
+		pick_list[g] = pick_list[g].replace('NE', 'NE*');
+		pick_list[g] = pick_list[g].replace('GB', 'GB*');
+		pick_list[g] = pick_list[g].replace('AZ', 'AZ*');
+		pick_list[g] = pick_list[g].replace('KC', 'KC*');
 	}
 	
 	var templateParams = {
@@ -332,7 +356,7 @@ table {
 
 <body>
 
-<div id="instruct">Click the teams you want to pick. <br> When you are finished, make sure to enter:<br> - Monday points <br> - your entry name <br> - your email address</div><br><br>
+<div id="instruct">Click the teams you want to pick. <br> When you are finished, make sure to enter<br> - Monday points <br> - your entry name <br> - your email address.</div><br><br>
 <div id="main_table"></div>
 <form id="frm1">
   Monday Points:
