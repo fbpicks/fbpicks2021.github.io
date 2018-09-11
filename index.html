@@ -25,7 +25,9 @@ $(document).ready(function() {
 
 var divClone = [];
 
-var xl = 'https://dl.dropboxusercontent.com/s/i4110nz1o2k5qtu/wkspreads.csv?raw=1';
+//https://www.dropbox.com/s/b43j8rev8ba5q1j/picks.csv?dl=0
+//https://www.dropbox.com/s/1h6o0cuxtjcjkwy/spreadz.csv?dl=0
+var xl = 'https://dl.dropboxusercontent.com/s/1h6o0cuxtjcjkwy/spreadz.csv?raw=1';
 //https://www.dropbox.com/s/i4110nz1o2k5qtu/wkspreads.csv?dl=0
 var m = [];
 var nCol = 4;
@@ -179,13 +181,21 @@ function SendPicks(){
 	}
 	
 	for (var g = 1; g <=17; g++){
-		pick_list[g] = pick_list[g].replace('NO', 'NO*');
+		if (pick_list[g] === "") {
+   			str = excel_output[1][g];
+			str = str.replace(/\d/g, "");
+			str = str.replace('+', "");
+			str = str.replace('.', "");
+			str = str.toUpperCase();
+   			pick_list[g] = str;
+		}
+		/*pick_list[g] = pick_list[g].replace('NO', 'NO*');
 		pick_list[g] = pick_list[g].replace('SF', 'SF*');
 		pick_list[g] = pick_list[g].replace('TB', 'TB*');
 		pick_list[g] = pick_list[g].replace('NE', 'NE*');
 		pick_list[g] = pick_list[g].replace('GB', 'GB*');
 		pick_list[g] = pick_list[g].replace('AZ', 'AZ*');
-		pick_list[g] = pick_list[g].replace('KC', 'KC*');
+		pick_list[g] = pick_list[g].replace('KC', 'KC*');*/
 	}
 	
 	var templateParams = {
