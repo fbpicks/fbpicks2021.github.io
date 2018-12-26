@@ -90,6 +90,9 @@ function Get_Data(){
 		}
 
 		num_games = excel_output[0].indexOf('Mon Pts') - 1;
+		if (num_games < 0){
+			num_games = excel_output[0].indexOf('Sun Pts') - 1;
+		}
 		
 		pick_list[0] = 'Pick';
 		for (var g = 1; g <=num_games; g++){
